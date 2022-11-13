@@ -3,6 +3,7 @@ import argparse
 import subprocess
 import sys
 from uuid import uuid4
+from time import sleep
 
 
 def sys_command(command):
@@ -128,13 +129,19 @@ class SPM():
 
     @staticmethod
     def restart(args):
-        # TODO actually wait for quit before starting
-        # so make a loop per service here instead of calling the subcommands
-        if args["kill"]:
-            SPM.kill(args)
-        else:
-            SPM.quit(args)
-        SPM.start(args)
+        services_info = read_procfile()
+        all_services = [s["name"] for s in services_info]
+        services = all_services
+        if args["names"]:
+            services = args["names"]
+        if "exclude" in args and args["exclude"]:
+            services = [s for s in services if s not in args["exclude"]]
+        for service in services:
+            if args["kill"]:
+                SPM.kill({"names": [service]})
+            else:
+                SPM.quit({"names": [service], "timeout": args["timeout"]})
+            SPM.start({"names": [service]})
 
     @staticmethod
     def quit(args):
@@ -148,6 +155,17 @@ class SPM():
             if screen:
                 screen.quit()
                 print(f"Service '{service}' was requested to quit")
+                timer = 0
+                while get_screen_by_name(service) and timer < args["timeout"]:
+                    timer += 1
+                    print(f"\rWaiting for '{service}' to close for {timer} seconds", end="")
+                    sleep(1)
+                if timer:
+                    print()
+                if get_screen_by_name(service):
+                    SPM.kill({"names": [service]})
+                else:
+                    print(f"Quit '{service}' successfully")
             elif service not in all_services:
                 print(f"Service '{service}' does not exist")
             else:
@@ -172,12 +190,16 @@ class SPM():
 
     @staticmethod
     def connect(args):
+        services_info = read_procfile()
+        all_services = [s["name"] for s in services_info]
         name = args["name"]
         screen = get_screen_by_name(name)
         if screen:
             screen.connect()
+        elif name not in all_services:
+            print(f"Service '{name}' does not exist")
         else:
-            print(f"Service '{name}' is not running or does not exist")
+            print(f"Service '{name}' is not running")
 
     @staticmethod
     def list(_args):
@@ -241,11 +263,17 @@ def main():
         "--kill", "-k", action="store_true",
         help="Kill services before starting them again instead of quitting")
     sub_restart.add_argument(
+        "--timeout", "-t", default=5, type=int,
+        help="Timeout to give services to quit before killing them")
+    sub_restart.add_argument(
         "names", nargs="*", help="Service names to restart")
     # Quit
     sub_quit = sub.add_parser(
         "quit", aliases=["q"], help="Quit all or some services",
         description="Provide some names to quit them, or quit all")
+    sub_quit.add_argument(
+        "--timeout", "-t", default=5, type=int,
+        help="Timeout to give services to quit before killing them")
     sub_quit.add_argument("names", nargs="*", help="Service names to quit")
     # Kill
     sub_kill = sub.add_parser(
