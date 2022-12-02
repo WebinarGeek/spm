@@ -158,7 +158,9 @@ class SPM():
                 timer = 0
                 while get_screen_by_name(service) and timer < args["timeout"]:
                     timer += 1
-                    print(f"\rWaiting for '{service}' to close for {timer} seconds", end="")
+                    print(
+                        f"\rWaiting for '{service}' to close for "
+                        "{timer} seconds", end="")
                     sleep(1)
                 if timer:
                     print()
@@ -286,11 +288,11 @@ def main():
         description="Provide a service name and connect to it interactively")
     sub_connect.add_argument("name", help="Service name to connect to")
     # Help
-    sub_help = sub.add_parser(
+    sub.add_parser(
         "help", aliases=["h"], help="Show this help and exit",
         description="Show this help and exit")
     # List
-    sub_list = sub.add_parser(
+    sub.add_parser(
         "list", aliases=["l"], help="Show a list of services with status",
         description="Each service in the Procfile will be listed with status")
     # Tail

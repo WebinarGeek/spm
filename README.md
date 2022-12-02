@@ -14,7 +14,7 @@ nginx: nginx
 ```
 
 You can then run `spm s` or `spm start` to start all of these in separate screens.
-After that you can run a series of other subcommands to manange them.
+After that you can run a series of other subcommands to manage them.
 Most commands can either run for all Procfile-defined services or by service name.
 You can for example restart rails with `spm r rails` or restart them all with `spm r`.
 
@@ -63,5 +63,5 @@ sub-commands:
 
 # License
 
-The spm tool is created by [Jelmer van Arnhem](https://github.com/Jelmerro) at [WebinarGeek](https://github.com/gebinarGeek)
+The spm tool is created by [Jelmer van Arnhem](https://github.com/Jelmerro) at [WebinarGeek](https://github.com/WebinarGeek)
 and may be copied and modified under the terms of the [MIT license](./LICENSE).
