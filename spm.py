@@ -160,7 +160,7 @@ class SPM():
                     timer += 1
                     print(
                         f"\rWaiting for '{service}' to close for "
-                        "{timer} seconds", end="")
+                        f"{timer} seconds", end="")
                     sleep(1)
                 if timer:
                     print()
