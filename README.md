@@ -1,7 +1,8 @@
-spm
-===
+# spm
 
 The lightweight Screen Procfile Manager
+
+![test](./spm.svg)
 
 Using spm you can start/stop connect/kill Procfile defined services easily.
 Either one by one or in bulk by using single characters or full argument names.
