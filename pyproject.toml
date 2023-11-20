@@ -1,0 +1,11 @@
+[project]
+name="spm"
+version="0.1.0"
+authors=[{name="WebinarGeek"}]
+description="The lightweight Screen Procfile Manager"
+license={text="MIT"}
+requires-python=">=3.7"
+[tool.setuptools]
+include-package-data=true
+[project.scripts]
+spm="spm:main"
