@@ -9,8 +9,8 @@ from time import sleep
 def sys_command(command):
     if isinstance(command, str):
         command = command.split()
-    popen = subprocess.Popen(command, stdout=subprocess.PIPE)
-    lines_iterator = iter(popen.stdout.readline, b"")
+    with subprocess.Popen(command, stdout=subprocess.PIPE) as s:
+        lines_iterator = s.stdout.readlines()
     output = None
     for line in lines_iterator:
         if output is None:
@@ -44,7 +44,7 @@ def get_screen_by_name(name):
 def read_procfile():
     services = []
     try:
-        with open("./Procfile") as f:
+        with open("./Procfile", encoding="utf-8") as f:
             lines = f.readlines()
         for line in lines:
             name, command = line.split(":", maxsplit=1)
