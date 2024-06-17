@@ -24,9 +24,10 @@ You can for example restart rails with `spm r rails` or restart them all with `s
 The default pip-method:
 
 ```bash
-pip3 install --user --upgrade git+https://github.com/WebinarGeek/spm
+pip install --user -I git+https://github.com/WebinarGeek/spm
 ```
 
+The above can also be used to upgrade, though you might need to use `pip3` instead.
 Or alternatively, the "I don't want to install pip"-method:
 
 ```bash
