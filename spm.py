@@ -2,8 +2,9 @@
 import argparse
 import subprocess
 import sys
-from uuid import uuid4
+from os import environ
 from time import sleep
+from uuid import uuid4
 
 
 def sys_command(command):
@@ -43,8 +44,9 @@ def get_screen_by_name(name):
 
 def read_procfile():
     services = []
+    procfile = environ.get("SPM_PROCFILE", "./Procfile")
     try:
-        with open("./Procfile", encoding="utf-8") as f:
+        with open(procfile, encoding="utf-8") as f:
             lines = f.readlines()
         for line in lines:
             name, command = line.split(":", maxsplit=1)
