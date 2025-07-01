@@ -49,6 +49,10 @@ def read_procfile():
         with open(procfile, encoding="utf-8") as f:
             lines = f.readlines()
         for line in lines:
+            # Skip empty lines and comments
+            stripped_line = line.strip()
+            if not stripped_line or stripped_line.startswith("#"):
+                continue
             name, command = line.split(":", maxsplit=1)
             services.append({"name": name, "command": command.strip()})
     except FileNotFoundError:
