@@ -27,8 +27,12 @@ def get_all_screens():
     for line in raw_output:
         if not line.startswith(b"\t"):
             continue
-        screen = line.decode().strip().split("\t")[0]
+        screen, status = line.decode().strip().split("\t")
         num, name = screen.split(".")
+        if "Remote" in status or "dead" in status:
+            print(f"Wiping dead screen '{name}'")
+            sys_command(f"screen -wipe {name}")
+            continue
         screen = Screen(name, existing=True)
         screen.id = int(num)
         screens.append(screen)
@@ -94,6 +98,7 @@ class Screen():
     def tail(self, limit):
         uuid = str(uuid4())
         self.screen_command("hardcopy", "-h", f"/tmp/spm{uuid}")
+        sleep(.1)
         try:
             with open(f"/tmp/spm{uuid}", "rb") as f:
                 lines = f.readlines()
