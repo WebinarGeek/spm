@@ -134,7 +134,7 @@ class SPM():
                     s["command"] for s in services_info if s["name"] == service
                 ][0]
                 screen = Screen(service)
-                screen.screen_command("stuff", "source .env^M")
+                screen.screen_command("stuff", "source .env 2>/dev/null^M")
                 screen.screen_command("stuff", f"{command}^M")
                 print(f"Service '{service}' was started")
 
